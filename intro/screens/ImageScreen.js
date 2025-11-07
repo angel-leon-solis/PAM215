@@ -1,7 +1,8 @@
-import { Text, StyleSheet, View, ImageBackground,Animated, Easing } from 'react-native'
+
+import  { Text, StyleSheet, View, ImageBackground,Animated, Easing } from 'react-native'
 import Recat, { useState, useEffect, use} from 'react'
 
-export default function ImageScreen() {
+export default function imageScreen() {
   const [cargando,setCargando] = useState(true);
   const desvanecido = new Animated.Value(1);
 
