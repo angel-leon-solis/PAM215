@@ -1,13 +1,13 @@
 import { Text, StyleSheet, View, ImageBackground,Animated, Easing, ScrollView } from 'react-native'
 import Recat, { useState, useEffect, use} from 'react'
+import { Button } from 'react-native-web';
 
 export default function App() {
   const [cargando,setCargando] = useState(true);
   const desvanecido = new Animated.Value(1);
-const ScrollRef = useRef();  
-  const irFinal=() => {
-    ScrollRef.current.scrollToEnd({animated:true})
-  }
+ const[contador,setcontador]=useState(0);
+  
+  
   useEffect(()=>{
     const timer = setTimeout(() => {
       Animated.timing(desvanecido,{
@@ -22,7 +22,7 @@ const ScrollRef = useRef();
 
   },[]);
 
-  if(cargando){
+   if(cargando){
     return(
       <Animated.View style={[styles.splashContainer,{opacity: desvanecido} ]}>
         <ImageBackground
@@ -48,6 +48,44 @@ const ScrollRef = useRef();
        <View style={styles.textocontainer}>
         <Text style={styles.texto}>Biendenida a mi App</Text>
         <Text style={styles.titulo2}> mis deberes 07/11/25 </Text>
+        
+        <ScrollView 
+        horizontal
+          nestedScrollEnabled={true}
+          style={styles.scrollhorizontal}
+          showsHorizontalScrollIndicator={true}
+        >
+          <View style={styles.elementos}>
+            <Text style={styles.text}>cuadro 1</Text>
+            <Text>Descripcion:sacar al perrro 
+              Prioridad:baja 
+              Status:pendiente
+            </Text>
+          </View>
+          <View style={styles.elementos1}>
+            <Text style={styles.text}>cuadro 2</Text>
+            <Text>limpiar la casa
+              Prioridad:alta 
+              Status:pendiente
+            </Text>
+          </View>
+          <View style={styles.elementos2}>
+            <Text style={styles.text}>cuadro 3</Text>
+            <Text>Descripcion:hacer tarea mate 
+              Prioridad:alta 
+              Status:realizado
+            </Text>
+            
+          </View>    
+
+          <View style={styles.elementos2}>
+            <Text style={styles.text}>reinicio </Text>
+            <Button title=''>
+
+            </Button>
+            </View>
+
+        </ScrollView>
 
 
         </View> 
@@ -100,6 +138,47 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
 
 
+  },
+  scrollhorizontal:{
+  marginVertical:10,
+  width:'100%',
+
+},
+
+elementos:{
+  width:'100%',
+  height:100,
+  backgroundColor:'#7842f5a9',
+  marginBottom:10,
+  justifyContent:'center',
+  alignItems:'center',
+  marginVertical:10,
+  borderRadius:10,
+},
+elementos1:{
+  width:'100%',
+  height:100,
+  backgroundColor:'#f54242a9',
+  marginBottom:10,
+  justifyContent:'center',
+  alignItems:'center',
+  marginVertical:10,
+  borderRadius:10,
+},
+elementos2:{
+  width:'100%',
+  height:100,
+  backgroundColor:'#42c2f5a9',
+  marginBottom:10,
+  justifyContent:'center',
+  alignItems:'center',
+  marginVertical:10,
+  borderRadius:10,
+},
+tex:{
+    color: 'black',
+    fontSize:24,
+    fontWeight: 'bold',
   },
   
 
