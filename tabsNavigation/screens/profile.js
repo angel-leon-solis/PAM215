@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Profile() {
+
+
+export default function Profile({ navigation }) {
   return (
     <View style={styles.container}>
 
@@ -9,6 +11,13 @@ export default function Profile() {
         <Ionicons name="person-outline" size={28} color="green" />
         <Text style={styles.title}> Perfil de usuario </Text>
       </View>
+
+      <Pressable
+  style={{ marginTop: 20, padding: 12, backgroundColor: 'green', borderRadius: 8 }}
+  onPress={() => navigation.navigate('Detalle')}
+>
+  <Text style={{ color: 'white', fontWeight: 'bold' }}>Detalles de usuario</Text>
+</Pressable>
 
     </View>
   );
