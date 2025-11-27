@@ -73,6 +73,47 @@ class DatabaseService {
             throw error;
         }
     }
+    async update(id, nombre) {
+    try {
+        if (Platform.OS === 'web') {
+            const usuarios = await this.getAll();
+            const index = usuarios.findIndex(u => u.id === id);
+            if (index !== -1) {
+                usuarios[index].nombre = nombre;
+                localStorage.setItem(this.storageKey, JSON.stringify(usuarios));
+                return usuarios[index];
+            }
+            throw new Error('Usuario no encontrado');
+        } else {
+            await this.db.runAsync(
+                'UPDATE usuarios SET nombre = ? WHERE id = ?',
+                [nombre, id]
+            );
+            return { id, nombre };
+        }
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        throw error;
+    }
+}
+
+// ELIMINAR USUARIO
+async delete(id) {
+    try {
+        if (Platform.OS === 'web') {
+            let usuarios = await this.getAll();
+            usuarios = usuarios.filter(u => u.id !== id);
+            localStorage.setItem(this.storageKey, JSON.stringify(usuarios));
+            return true;
+        } else {
+            await this.db.runAsync('DELETE FROM usuarios WHERE id = ?', [id]);
+            return true;
+        }
+    } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        throw error;
+    }
+}
 }
 
 export default new DatabaseService();

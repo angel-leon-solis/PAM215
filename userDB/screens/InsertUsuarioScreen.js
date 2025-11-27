@@ -8,6 +8,8 @@ export default function InsertUsuarioScreen() {
   const [nombre, setNombre] = useState('');
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
+  const [editando, setEditando] = useState(null);
+
   
   const controller = useState(() => new UsuarioController())[0];
 
@@ -74,14 +76,60 @@ export default function InsertUsuarioScreen() {
         <Text style={styles.userId}>ID: {item.id}</Text>
         <Text style={styles.userDate}>
             {new Date(item.fechaCreacion).toLocaleDateString('es-MX', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
             })}
         </Text>
         </View>
+            <View>
+      <TouchableOpacity onPress={() => { setEditando(item); setNombre(item.nombre); }}>
+        <Text style={{ color: 'green', marginBottom: 5 }}>Editar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => handleEliminar(item.id)}>
+        <Text style={{ color: 'red' }}>Eliminar</Text>
+      </TouchableOpacity>
+    </View>
+
+
     </View>
     );
+
+    const handleActualizar = async () => {
+  if (!nombre.trim()) {
+    Alert.alert('Validación', 'Ingresa un nombre');
+    return;
+  }
+  try {
+    setGuardando(true);
+    await controller.actualizarUsuario(editando.id, nombre);
+    Alert.alert('Actualizado', 'Usuario actualizado correctamente');
+    setNombre('');
+    setEditando(null); // salir del modo edición
+  } catch (error) {
+    Alert.alert('Error', error.message);
+  } finally {
+    setGuardando(false);
+  }
+};
+
+
+const handleEliminar = (id) => {
+  Alert.alert('Confirmación', '¿Eliminar este usuario?', [
+    { text: 'Cancelar', style: 'cancel' },
+    {
+      text: 'Eliminar', style: 'destructive',
+      onPress: async () => {
+        try {
+          await controller.eliminarUsuario(id);
+          Alert.alert('Eliminado', 'Usuario borrado');
+        } catch (e) {
+          Alert.alert('Error', e.message);
+        }
+      }
+    }
+  ]);
+};
+
+
 
 
 
@@ -112,11 +160,11 @@ export default function InsertUsuarioScreen() {
 
         <TouchableOpacity 
           style={[styles.button, guardando && styles.buttonDisabled]} 
-          onPress={handleAgregar}
+          onPress={editando ? handleActualizar : handleAgregar}
           disabled={guardando} >
 
           <Text style={styles.buttonText}>
-            {guardando ? ' Guardando...' : 'Agregar Usuario'}
+            {guardando ? ' Guardando...' :  editando ? 'Actualizar Usuario' : 'Agregar Usuario'}
           </Text>
 
         </TouchableOpacity>
